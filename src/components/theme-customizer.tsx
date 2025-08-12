@@ -8,16 +8,10 @@ import { Button } from '@/components/ui/button';
 import { themes } from '@/lib/themes';
 import { cn } from '@/lib/utils';
 import { Label } from './ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 export function ThemeCustomizer() {
   const [config, setConfig] = useConfig();
   const { setTheme: setMode, resolvedTheme: mode } = useTheme();
-
-  const handleFontChange = (font: string) => {
-    document.body.style.setProperty('--font-body', `var(--font-${font})`);
-    setConfig({ ...config, font });
-  };
 
   return (
     <div className="p-4 space-y-6">
@@ -65,25 +59,25 @@ export function ThemeCustomizer() {
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant={config.font === 'inter' ? 'default' : 'outline'}
-            onClick={() => handleFontChange('inter')}
+            onClick={() => setConfig({ ...config, font: 'inter' })}
           >
             Inter
           </Button>
            <Button
             variant={config.font === 'poppins' ? 'default' : 'outline'}
-            onClick={() => handleFontChange('poppins')}
+            onClick={() => setConfig({ ...config, font: 'poppins' })}
           >
             Poppins
           </Button>
           <Button
             variant={config.font === 'literata' ? 'default' : 'outline'}
-            onClick={() => handleFontChange('literata')}
+            onClick={() => setConfig({ ...config, font: 'literata' })}
           >
             Literata
           </Button>
            <Button
             variant={config.font === 'source-serif' ? 'default' : 'outline'}
-            onClick={() => handleFontChange('source-serif')}
+            onClick={() => setConfig({ ...config, font: 'source-serif' })}
           >
             Source Serif
           </Button>

@@ -9,8 +9,8 @@ type Config = {
 };
 
 const configAtom = atomWithStorage<Config>('config', {
-  theme: 'blue',
-  font: 'inter',
+  theme: 'orange',
+  font: 'poppins',
 });
 
 export function useConfig() {

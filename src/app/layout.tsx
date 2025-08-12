@@ -40,11 +40,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${literata.variable} ${poppins.variable} ${sourceSerif.variable} font-body antialiased`}>
+      <body className={`${inter.variable} ${literata.variable} ${poppins.variable} ${sourceSerif.variable} font-sans antialiased`}>
         <ThemeProvider>
           {children}
+          <Toaster />
         </ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );
