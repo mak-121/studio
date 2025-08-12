@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { generatePdfAction, recordToCsvAction } from '@/app/actions';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   receipt_no: z.string().min(1, "Receipt number is required."),
@@ -215,8 +216,16 @@ export function PagePilotClient() {
         </fieldset>
         
         <Button type="submit" className="w-full mt-8" disabled={isLoading || !isValid}>
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
-          Generate & Print Receipt
+            <span
+                className={cn(
+                    "relative z-10 flex items-center justify-center gap-2",
+                    "transition-transform duration-100 ease-in-out",
+                    "active:translate-y-px"
+                )}
+            >
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
+                Generate & Print Receipt
+            </span>
         </Button>
       </form>
     </Form>
