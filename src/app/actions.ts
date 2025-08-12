@@ -96,7 +96,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         margin-bottom: 6px;
       }
       header .logo img {
-        width: 140px;
+        width: 130px;
       }
       header .right {
         text-align: right;
@@ -107,7 +107,6 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         text-align: center;
         font-size: 20px;
         font-weight: 700;
-        margin-top: 6px;
       }
       .subtitle {
         text-align: center;
