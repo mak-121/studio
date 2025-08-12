@@ -9,177 +9,96 @@ const receiptTemplateHtml = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <title>Receipt</title>
     <style>
-      @page {
-        margin: 30px;
-        size: A4;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        font-size: 12px;
-        color: #000;
-        position: relative;
-      }
-      .receipt-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-      }
-
-      .flex-wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        page-break-inside: avoid;
-        white-space: nowrap;
-      }
-
-      .summary {
-        page-break-inside: avoid;
-      }
-
-      .no-break {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        page-break-inside: avoid;
-        flex-wrap: nowrap;
-      }
-      .summary {
-        border-collapse: collapse;
-      }
-      .summary th,
-      .summary td {
-        border: 1px solid #000;
-        padding: 6px;
-        text-align: left;
-      }
-      .signature {
-        text-align: center;
-        margin-left: 20px;
-      }
-
-      .content {
-        position: relative;
-        z-index: 1;
-      }
-      .no-break-row {
-        page-break-inside: avoid;
-        page-break-before: auto;
-        page-break-after: auto;
-      }
-      .summary-table {
-        border-collapse: collapse;
-        width: auto;
-      }
-      .summary-table th,
-      .summary-table td {
-        border: 1px solid #000;
-        padding: 6px;
-        text-align: left;
-      }
-      .signature-box {
-        text-align: center;
-        vertical-align: top;
-        padding-left: 20px;
-      }
-      .signature-frame {
-        border: 1px solid black;
-        width: 100px;
-        height: 50px;
-        margin: 10px auto;
-      }
-
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 6px;
-      }
-      header .logo img {
-        width: 130px;
-      }
-      header .right {
-        text-align: right;
-        font-size: 11px;
-      }
-
-      .title {
-        text-align: center;
-        font-size: 20px;
-        font-weight: 700;
-      }
-      .subtitle {
-        text-align: center;
-        font-size: 14px;
-        margin-top: 2px;
-      }
-
-      .box {
-        border: 1px solid #000;
-        padding: 10px;
-        margin-top: 10px;
-      }
-
-      .desc {
-        margin-top: 12px;
-        line-height: 1.4;
-        text-align: justify;
-      }
-
-      .summary {
-        width: 60%;
-        border-collapse: collapse;
-        margin-top: 12px;
-      }
-      .summary th,
-      .summary td {
-        border: 1px solid #000;
-        padding: 6px;
-        text-align: left;
-      }
-      .summary th {
-        background: #f2f2f2;
-        font-weight: 700;
-      }
-      .right-align {
-        text-align: right;
-      }
-
-      footer {
-        margin-top: 20px;
-        font-size: 11px;
-      }
-      .signature {
-        float: right;
-        text-align: center;
-        margin-top: 40px;
-      }
-
-      .my-box {
-        width: 100px;
-        height: 50px;
-        background-color: #ffffff;
-        border: 2px solid black;
-        padding: 10px;
-        margin: 20px;
-      }
-
-      .receipt {
-        page-break-inside: avoid;
-        padding-bottom: 15px;
-      }
-      .receipt.original {
-         border-bottom: 2px dashed #000;
-         margin-bottom: 15px;
-      }
-
-      .form_data {
-        word-break: break-word;
-    white-space: pre-wrap;
-      }
-
-      
-    </style>
+  @page {
+    size: A4;
+    margin: 20px; /* Reduced page margin */
+  }
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 11px; /* Slightly smaller font for better fit */
+    color: #000;
+  }
+  /* --- Layout & Spacing --- */
+  .receipt {
+    page-break-inside: avoid;
+    padding-bottom: 10px;
+  }
+  .receipt.original {
+    border-bottom: 2px dashed #000;
+    margin-bottom: 10px; /* Reduced space between receipts */
+  }
+  .box {
+    border: 1px solid #000;
+    padding: 10px;
+    margin-top: 8px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+  footer {
+    margin-top: 15px; /* Reduced footer margin */
+    font-size: 9px;
+    line-height: 1.4;
+  }
+  /* --- Typography --- */
+  header .right {
+    font-weight: bold;
+  }
+  .title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 5px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  .desc {
+    margin-top: 8px;
+    line-height: 1.5;
+    text-align: left; /* Use left-align to avoid bad spacing */
+  }
+  /* --- Tables & Signature --- */
+  .summary-container {
+    width: 100%;
+    margin-top: 5px;
+  }
+  .summary {
+    border-collapse: collapse;
+  }
+  .summary th,
+  .summary td {
+    border: 1px solid #000;
+    padding: 5px; /* Reduced cell padding */
+    text-align: left;
+  }
+  .summary th {
+    background: #f2f2f2;
+    font-weight: 700;
+  }
+  .right-align {
+    text-align: right;
+  }
+  .signature-box {
+    text-align: center;
+    vertical-align: top;
+    padding-left: 20px;
+  }
+  .signature-frame {
+    border: 1px solid black;
+    width: 120px;
+    height: 50px;
+    margin: 5px auto;
+  }
+  .logo img {
+    width: 130px;
+  }
+</style>
   </head>
   <body>
     <div class="receipt-container">

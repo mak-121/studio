@@ -124,9 +124,9 @@ export function PagePilotClient() {
     <div className="flex justify-center items-start min-h-screen py-10">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border-t-4 border-primary">
-        <div className="text-center mb-6">
-          <img src="/logo.png" alt="KP Enterprise Logo" data-ai-hint="logo company" className="mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-foreground">Receipt Data Entry</h2>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-primary mb-2">KP ENTERPRISE</h1>
+          <p className="text-muted-foreground">Receipt Data Entry</p>
         </div>
 
         <fieldset className="mb-6">
