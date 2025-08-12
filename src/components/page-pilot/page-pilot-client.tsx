@@ -95,30 +95,21 @@ export function PagePilotClient() {
 
     if (result.success && result.data) {
         try {
-            const printFrame = document.createElement('iframe');
-            printFrame.style.display = 'none';
-            document.body.appendChild(printFrame);
-
-            printFrame.contentDocument?.write(result.data);
-            printFrame.contentDocument?.close();
-            
-            printFrame.onload = () => {
-              try {
-                printFrame.contentWindow?.focus();
-                printFrame.contentWindow?.print();
-              } catch (e: any) {
-                 setStatus('error');
-                 toast({ variant: "destructive", title: "Print Error", description: `There was an issue opening the print dialog: ${e.message}` });
-              } finally {
-                 // The iframe should be removed after the print dialog is handled.
-                 // Using a timeout allows the print process to complete.
-                 setTimeout(() => {
-                    document.body.removeChild(printFrame);
-                    setStatus('idle');
-                 }, 1000);
-              }
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                printWindow.document.write(result.data);
+                printWindow.document.close();
+                printWindow.onload = () => {
+                    printWindow.focus();
+                    printWindow.print();
+                    // Optional: close the tab after printing. Might be blocked by some browsers.
+                    // printWindow.close(); 
+                };
+                 setStatus('idle');
+            } else {
+                setStatus('error');
+                toast({ variant: "destructive", title: "Print Error", description: "Could not open print window. Please disable your pop-up blocker." });
             }
-
         } catch (e: any) {
             setStatus('error');
             toast({ variant: "destructive", title: "Print Error", description: `There was an issue preparing the document for printing: ${e.message}` });
