@@ -7,7 +7,7 @@ import { type ThemeProviderProps } from 'next-themes/dist/types';
 import { useConfig } from '@/hooks/use-config';
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  const { config } = useConfig();
+  const [config] = useConfig();
 
   return (
     <NextThemesProvider
