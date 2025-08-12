@@ -102,8 +102,6 @@ export function PagePilotClient() {
                 printWindow.onload = () => {
                     printWindow.focus();
                     printWindow.print();
-                    // Optional: close the tab after printing. Might be blocked by some browsers.
-                    // printWindow.close(); 
                 };
                  setStatus('idle');
             } else {
@@ -125,9 +123,9 @@ export function PagePilotClient() {
   return (
     <div className="flex justify-center items-start min-h-screen py-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-20px 40px 40px 40px rounded-xl shadow-lg border-t-4 border-primary">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border-t-4 border-primary">
         <div className="text-center mb-6">
-          <img src="https://placehold.co/180x60.png" alt="KP Enterprise Logo" data-ai-hint="logo company" className="mx-auto mb-4" />
+          <img src="/logo.png" alt="KP Enterprise Logo" data-ai-hint="logo company" className="mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground">Receipt Data Entry</h2>
         </div>
 

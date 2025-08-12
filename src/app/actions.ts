@@ -425,7 +425,7 @@ export async function generatePdfAction(formData: any) {
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
         total_amount_formatted: formatNumber(total),
-        logo_url: `https://placehold.co/140x60.png`,
+        logo_url: '/logo.png',
     };
 
     const html = template(templateData);
