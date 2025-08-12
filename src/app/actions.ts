@@ -23,6 +23,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        height: 98vh;
       }
 
       .flex-wrap {
