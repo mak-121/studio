@@ -147,7 +147,7 @@ export function PagePilotClient() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border-border/50"
+        className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border border-foreground/20"
         style={{ borderWidth: `${config.borderWidth}px` }}
         >
         <div className="text-center mb-8">
