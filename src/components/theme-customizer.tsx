@@ -18,7 +18,7 @@ export function ThemeCustomizer() {
         <div className="flex items-center space-x-2">
            <input
             type="color"
-            value={config.accentColor}
+            value={config.accentColor || '#000000'}
             onChange={(e) =>
               setConfig({ ...config, accentColor: e.target.value })
             }
