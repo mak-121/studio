@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "ledgerflow",
+    "rewrites": [
+      {
+        "source": "**",
+        "apphosting": {
+          "backendId": "ledgerflow"
+        }
+      }
+    ]
+  }
+}
