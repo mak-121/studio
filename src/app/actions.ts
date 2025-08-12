@@ -2,6 +2,8 @@
 
 import Handlebars from 'handlebars';
 import { toWords } from 'number-to-words';
+import fs from 'fs/promises';
+import path from 'path';
 
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
@@ -352,5 +354,33 @@ export async function generatePdfAction(formData: any) {
   } catch (error: any) {
     console.error('HTML generation failed:', error);
     return { success: false, error: `Failed to generate HTML: ${error.message}` };
+  }
+}
+
+export async function recordToCsvAction(formData: any) {
+  try {
+    const filePath = path.join(process.cwd(), 'receipt_log.csv');
+    const headers = Object.keys(formData);
+    const csvRow = headers.map(header => JSON.stringify(formData[header])).join(',');
+
+    let fileExists = false;
+    try {
+      await fs.access(filePath);
+      fileExists = true;
+    } catch (e) {
+      // File doesn't exist
+    }
+
+    if (!fileExists) {
+      const headerRow = headers.join(',');
+      await fs.writeFile(filePath, headerRow + '\n');
+    }
+
+    await fs.appendFile(filePath, csvRow + '\n');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('CSV writing failed:', error);
+    return { success: false, error: `Failed to write to CSV: ${error.message}` };
   }
 }

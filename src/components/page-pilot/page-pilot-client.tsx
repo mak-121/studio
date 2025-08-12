@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { generatePdfAction } from '@/app/actions';
+import { generatePdfAction, recordToCsvAction } from '@/app/actions';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const formSchema = z.object({
@@ -92,8 +92,16 @@ export function PagePilotClient() {
     }
 
     const result = await generatePdfAction(finalValues);
-
+    
     if (result.success && result.data) {
+        // Also record to CSV
+        const csvResult = await recordToCsvAction(finalValues);
+        if (!csvResult.success) {
+            console.error("Failed to record to CSV:", csvResult.error);
+            // Optionally notify user of CSV write failure
+            toast({ variant: "destructive", title: "CSV Write Error", description: "Could not save the record to the log file." });
+        }
+
         try {
             const printWindow = window.open('', '_blank');
             if (printWindow) {
