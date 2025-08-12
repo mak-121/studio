@@ -13,7 +13,7 @@ export const themes: Theme[] = [
     name: 'orange',
     label: 'Orange',
     activeColor: {
-      light: '25 84% 68%',
+      light: '25 95% 53%',
       dark: '25 84% 68%',
     },
   },
@@ -21,7 +21,7 @@ export const themes: Theme[] = [
     name: 'green',
     label: 'Green',
     activeColor: {
-      light: '140 60% 50%',
+      light: '140 60% 45%',
       dark: '140 60% 55%',
     },
   },
@@ -34,4 +34,3 @@ export const themes: Theme[] = [
     },
   },
 ];
-
