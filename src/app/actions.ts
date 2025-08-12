@@ -404,13 +404,14 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
+// Register the helper once, outside the function.
+handlebars.registerHelper('ne', function (a, b) {
+  return a !== b;
+});
+
 export async function generatePdfAction(formData: any) {
   let browser;
   try {
-    handlebars.registerHelper('ne', function (a, b) {
-      return a !== b;
-    });
-
     const template = handlebars.compile(receiptTemplateHtml);
 
     const total = Number(formData.amount) || 0;
@@ -438,6 +439,7 @@ export async function generatePdfAction(formData: any) {
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
     });
+
     const page = await browser.newPage();
     
     await page.setContent(html, { waitUntil: 'networkidle0' });
