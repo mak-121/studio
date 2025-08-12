@@ -21,6 +21,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
     color: #000;
   }
   /* --- Layout & Spacing --- */
+  .receipt-container {
+      page-break-inside: avoid;
+  }
   .receipt {
     page-break-inside: avoid;
     padding-bottom: 10px;
@@ -108,7 +111,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       <div class="content receipt original">
         <header>
           <div class="logo">
-            <img src="{{ logo_url }}" alt="logo" />
+            <img src="/logo.png" alt="logo" />
           </div>
           <div class="right">Original</div>
         </header>
@@ -215,7 +218,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       <div class="content receipt">
         <header>
           <div class="logo">
-            <img src="{{ logo_url }}" alt="logo" />
+            <img src="/logo.png" alt="logo" />
           </div>
           <div class="right">Duplicate</div>
         </header>
@@ -345,7 +348,6 @@ export async function generatePdfAction(formData: any) {
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
         total_amount_formatted: formatNumber(total),
-        logo_url: '/logo.png',
     };
 
     const html = template(templateData);
@@ -357,22 +359,43 @@ export async function generatePdfAction(formData: any) {
   }
 }
 
+// Defines the exact order of columns for the CSV file.
+const CSV_HEADERS = [
+    'receipt_no', 'date', 'name', 'plot',
+    'payment_mode', 'bank', 'branch', 'cheque_no',
+    'sales_amount', 'extra_work', 'other_receipts', 'amount'
+];
+
+/**
+ * Sanitizes a value for CSV by quoting it if it contains a comma or quote.
+ * Also handles any existing quotes by doubling them.
+ */
+function sanitizeCsvValue(value: any): string {
+    const str = String(value ?? '');
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+}
+
+
 export async function recordToCsvAction(formData: any) {
   try {
     const filePath = path.join(process.cwd(), 'receipt_log.csv');
-    const headers = Object.keys(formData);
-    const csvRow = headers.map(header => JSON.stringify(formData[header])).join(',');
+    
+    // Use the predefined headers to ensure consistent order.
+    const csvRow = CSV_HEADERS.map(header => sanitizeCsvValue(formData[header])).join(',');
 
     let fileExists = false;
     try {
       await fs.access(filePath);
       fileExists = true;
     } catch (e) {
-      // File doesn't exist
+      // File doesn't exist, will be created.
     }
 
     if (!fileExists) {
-      const headerRow = headers.join(',');
+      const headerRow = CSV_HEADERS.join(',');
       await fs.writeFile(filePath, headerRow + '\n');
     }
 
