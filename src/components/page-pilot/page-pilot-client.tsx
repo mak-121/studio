@@ -39,6 +39,22 @@ const formSchema = z.object({
 }, {
     message: "Cheque / Transaction No is required.",
     path: ["cheque_no"],
+}).refine((data) => {
+    if (data.payment_mode !== 'Cash' && !data.bank) {
+        return false;
+    }
+    return true;
+}, {
+    message: "Bank Name is required.",
+    path: ["bank"],
+}).refine((data) => {
+    if (data.payment_mode !== 'Cash' && !data.branch) {
+        return false;
+    }
+    return true;
+}, {
+    message: "Branch is required.",
+    path: ["branch"],
 });
 
 export function PagePilotClient() {
@@ -105,6 +121,15 @@ export function PagePilotClient() {
         }
 
         try {
+            // Trigger PDF download
+            const blob = new Blob([result.data], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `receipt_${finalValues.receipt_no}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
             const printWindow = window.open('', '_blank');
             if (printWindow) {
                 printWindow.document.write(result.data);
@@ -133,7 +158,7 @@ export function PagePilotClient() {
   return (
     <div className="flex justify-center items-start min-h-screen py-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border border-border/50 border-t-4 border-primary">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border border-border/50">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">KP ENTERPRISE</h1>
           <p className="text-muted-foreground">Receipt Data Entry</p>
@@ -185,10 +210,18 @@ export function PagePilotClient() {
             )} />
           )}
           <FormField control={form.control} name="bank" render={({ field }) => (
-            <FormItem className="mb-4"><FormLabel>Bank Name:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+            <FormItem className="mb-4">
+              <FormLabel>Bank Name: {paymentMode === 'Cash' && '(Optional)'}</FormLabel>
+              <FormControl><Input {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
           )} />
           <FormField control={form.control} name="branch" render={({ field }) => (
-            <FormItem className="mb-4"><FormLabel>Branch:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+            <FormItem className="mb-4">
+              <FormLabel>Branch: {paymentMode === 'Cash' && '(Optional)'}</FormLabel>
+              <FormControl><Input {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
           )} />
           <FormField control={form.control} name="cheque_no" render={({ field }) => (
             <FormItem className="mb-4">
@@ -216,7 +249,14 @@ export function PagePilotClient() {
         </fieldset>
         
         <Button type="submit" className="w-full mt-8" disabled={isLoading || !isValid}>
-          <span className="relative z-10 flex items-center justify-center gap-2 transition-transform duration-100 ease-in-out active:translate-y-px">
+            <span
+                className={cn(
+                    "relative z-10 flex items-center justify-center gap-2",
+                    "w-full h-full",
+                    "transition-transform duration-100 ease-in-out",
+                    "active:translate-y-px"
+                )}
+            >
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
               Generate & Print Receipt
           </span>
