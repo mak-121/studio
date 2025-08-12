@@ -32,26 +32,20 @@ const formSchema = z.object({
   other_receipts: z.string().optional(),
   amount: z.coerce.number(),
 }).refine((data) => {
-    if (data.payment_mode !== 'Cash' && !data.cheque_no) {
-        return false;
-    }
-    return true;
+    if (data.payment_mode === 'Cash') return true;
+    return !!data.cheque_no;
 }, {
     message: "Cheque / Transaction No is required.",
     path: ["cheque_no"],
 }).refine((data) => {
-    if (data.payment_mode !== 'Cash' && !data.bank) {
-        return false;
-    }
-    return true;
+    if (data.payment_mode === 'Cash') return true;
+    return !!data.bank;
 }, {
     message: "Bank Name is required.",
     path: ["bank"],
 }).refine((data) => {
-    if (data.payment_mode !== 'Cash' && !data.branch) {
-        return false;
-    }
-    return true;
+    if (data.payment_mode === 'Cash') return true;
+    return !!data.branch;
 }, {
     message: "Branch is required.",
     path: ["branch"],
@@ -212,21 +206,21 @@ export function PagePilotClient() {
           <FormField control={form.control} name="bank" render={({ field }) => (
             <FormItem className="mb-4">
               <FormLabel>Bank Name: {paymentMode === 'Cash' && '(Optional)'}</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
+              <FormControl><Input {...field} disabled={paymentMode === 'Cash'} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="branch" render={({ field }) => (
             <FormItem className="mb-4">
               <FormLabel>Branch: {paymentMode === 'Cash' && '(Optional)'}</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
+              <FormControl><Input {...field} disabled={paymentMode === 'Cash'} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />
           <FormField control={form.control} name="cheque_no" render={({ field }) => (
             <FormItem className="mb-4">
               <FormLabel>Cheque / Transaction No: {paymentMode === 'Cash' && '(Optional)'}</FormLabel>
-              <FormControl><Input {...field} /></FormControl>
+              <FormControl><Input {...field} disabled={paymentMode === 'Cash'} /></FormControl>
               <FormMessage />
             </FormItem>
           )} />

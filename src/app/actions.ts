@@ -359,17 +359,13 @@ export async function generatePdfAction(formData: any) {
   }
 }
 
-// Defines the exact order of columns for the CSV file.
+const CSV_FILE_PATH = path.join(process.cwd(), 'receipt_log.csv');
 const CSV_HEADERS = [
     'receipt_no', 'date', 'name', 'plot',
     'payment_mode', 'bank', 'branch', 'cheque_no',
     'sales_amount', 'extra_work', 'other_receipts', 'amount'
 ];
 
-/**
- * Sanitizes a value for CSV by quoting it if it contains a comma or quote.
- * Also handles any existing quotes by doubling them.
- */
 function sanitizeCsvValue(value: any): string {
     const str = String(value ?? '');
     if (str.includes(',') || str.includes('"') || str.includes('\n')) {
@@ -378,31 +374,39 @@ function sanitizeCsvValue(value: any): string {
     return str;
 }
 
-
 export async function recordToCsvAction(formData: any) {
   try {
-    const filePath = path.join(process.cwd(), 'receipt_log.csv');
     const csvRow = CSV_HEADERS.map(header => sanitizeCsvValue(formData[header])).join(',');
 
-    let fileContent = '';
     try {
-      fileContent = await fs.readFile(filePath, 'utf-8');
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
-        // File doesn't exist, create it with headers
-        const headerRow = CSV_HEADERS.join(',');
-        await fs.writeFile(filePath, headerRow + '\n');
-      } else {
-        throw error; // Other errors
-      }
+      // Check if file exists, if not, create it with a header
+      await fs.access(CSV_FILE_PATH);
+    } catch {
+      const headerRow = CSV_HEADERS.join(',');
+      await fs.writeFile(CSV_FILE_PATH, headerRow + '\n', 'utf-8');
     }
 
     // Append new row
-    await fs.appendFile(filePath, csvRow + '\n');
+    await fs.appendFile(CSV_FILE_PATH, csvRow + '\n', 'utf-8');
     
     return { success: true };
   } catch (error: any) {
     console.error('CSV writing failed:', error);
     return { success: false, error: `Failed to write to CSV: ${error.message}` };
   }
+}
+
+
+export async function downloadCsvAction() {
+    try {
+        await fs.access(CSV_FILE_PATH);
+        const fileContent = await fs.readFile(CSV_FILE_PATH, 'utf-8');
+        return { success: true, data: fileContent };
+    } catch (error: any) {
+        if (error.code === 'ENOENT') {
+            return { success: false, error: "Log file does not exist yet. Please generate a receipt first." };
+        }
+        console.error('CSV reading failed:', error);
+        return { success: false, error: `Failed to read CSV file: ${error.message}` };
+    }
 }
