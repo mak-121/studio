@@ -16,6 +16,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { cn } from '@/lib/utils';
 import { useConfig } from '@/hooks/use-config';
 
+const numericString = (schema: z.ZodString) =>
+  schema.regex(/^\d*\.?\d*$/, "Only numbers are allowed.");
+
 const formSchema = z.object({
   receipt_no: z.string().min(1, "Receipt number is required."),
   date: z.string().min(1, "Date is required."),
@@ -28,9 +31,9 @@ const formSchema = z.object({
   bank: z.string().optional(),
   branch: z.string().optional(),
   cheque_no: z.string().optional(),
-  sales_amount: z.string().min(1, "Sales amount is required."),
-  extra_work: z.string().optional(),
-  other_receipts: z.string().optional(),
+  sales_amount: numericString(z.string()).min(1, "Sales amount is required."),
+  extra_work: numericString(z.string()).optional(),
+  other_receipts: numericString(z.string()).optional(),
   amount: z.coerce.number(),
 }).refine((data) => {
     if (data.payment_mode === 'Cash') return true;
@@ -236,13 +239,13 @@ export function LedgerFlowClient() {
         <fieldset>
           <legend className="text-lg font-semibold text-primary w-full border-b pb-2 mb-4">Amount Breakdown</legend>
           <FormField control={form.control} name="sales_amount" render={({ field }) => (
-            <FormItem className="mb-4"><FormLabel>Sales Amount:</FormLabel><FormControl><Input type="number" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
+            <FormItem className="mb-4"><FormLabel>Sales Amount:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
           )} />
           <FormField control={form.control} name="extra_work" render={({ field }) => (
-            <FormItem className="mb-4"><FormLabel>Extra Work:</FormLabel><FormControl><Input type="number" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
+            <FormItem className="mb-4"><FormLabel>Extra Work:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
           )} />
           <FormField control={form.control} name="other_receipts" render={({ field }) => (
-            <FormItem className="mb-4"><FormLabel>Other Receipts:</FormLabel><FormControl><Input type="number" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
+            <FormItem className="mb-4"><FormLabel>Other Receipts:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
           )} />
           <FormField control={form.control} name="amount" render={({ field }) => (
             <FormItem><FormLabel>Total Amount (auto-calculated):</FormLabel><FormControl><Input type="number" {...field} readOnly className="bg-muted" /></FormControl><FormMessage /></FormItem>
@@ -267,3 +270,5 @@ export function LedgerFlowClient() {
     </div>
   );
 }
+
+    

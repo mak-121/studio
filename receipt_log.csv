@@ -8,3 +8,4 @@ receipt_no,date,name,plot_type,plot_number,plot,payment_mode,bank,branch,cheque_
 1112011,2025-08-12,Patel Mak ,Flat No. 1201,Cash,,,,1199,0,0,1199
 1112011,2025-08-12,Patel Mak ,Flat No. 1201,Cash,,,,1199,0,0,1199
 000001,2025-08-12,Manav Boghra,Flat No. 201,Cash,,,,11999,0,0,11999
+1112011,2025-08-11,Patel Mak ,Flat No. 1201,Cheque,SBI,Nikol,12002,1200000,0,0,1200000
