@@ -22,8 +22,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       .receipt-container {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        height: 98vh; /* Use viewport height to manage space */
+        justify-content: flex-start;
       }
 
       .flex-wrap {
