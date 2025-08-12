@@ -21,7 +21,6 @@ export function MovingBorderButton({
       }}
       {...props}
     >
-      <span className="absolute-center h-full w-full rounded-full bg-background" />
       <span
         className={cn(
           "relative z-10 flex items-center justify-center gap-2",

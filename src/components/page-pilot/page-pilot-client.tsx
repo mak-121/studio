@@ -216,16 +216,10 @@ export function PagePilotClient() {
         </fieldset>
         
         <Button type="submit" className="w-full mt-8" disabled={isLoading || !isValid}>
-            <span
-                className={cn(
-                    "relative z-10 flex items-center justify-center gap-2",
-                    "transition-transform duration-100 ease-in-out",
-                    "active:translate-y-px"
-                )}
-            >
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
-                Generate & Print Receipt
-            </span>
+          <span className="relative z-10 flex items-center justify-center gap-2 transition-transform duration-100 ease-in-out active:translate-y-px">
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
+              Generate & Print Receipt
+          </span>
         </Button>
       </form>
     </Form>
