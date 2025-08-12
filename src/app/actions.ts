@@ -405,11 +405,11 @@ const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFr
 
 export async function generatePdfAction(formData: any) {
   try {
-    const template = handlebars.compile(receiptTemplateHtml);
-
     handlebars.registerHelper('ne', function (a, b) {
       return a !== b;
     });
+    
+    const template = handlebars.compile(receiptTemplateHtml);
 
     const total = Number(formData.amount) || 0;
     const salesAmount = Number(formData.sales_amount) || 0;
