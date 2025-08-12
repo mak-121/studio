@@ -3,7 +3,7 @@
 
 import { Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Header } from '@/components/page-pilot/header';
 import { PagePilotClient } from '@/components/page-pilot/page-pilot-client';
 import { ThemeCustomizer } from '@/components/theme-customizer';
@@ -24,6 +24,12 @@ export default function Home() {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[320px] sm:w-[400px]">
+            <SheetHeader>
+              <SheetTitle>Customize Theme</SheetTitle>
+              <SheetDescription>
+                Pick a color palette and font to personalize the application's appearance.
+              </SheetDescription>
+            </SheetHeader>
             <ThemeCustomizer />
           </SheetContent>
         </Sheet>

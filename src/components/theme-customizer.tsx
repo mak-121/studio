@@ -21,10 +21,6 @@ export function ThemeCustomizer() {
 
   return (
     <div className="p-4 space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Customize Theme</h3>
-      </div>
-
       <div className="space-y-4">
         <Label className="text-base">Color Palette</Label>
         <div className="grid grid-cols-2 gap-2">
