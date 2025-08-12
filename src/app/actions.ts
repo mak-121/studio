@@ -1,6 +1,6 @@
 'use server';
 
-import handlebars from 'handlebars';
+import Handlebars from 'handlebars';
 import { toWords } from 'number-to-words';
 
 const receiptTemplateHtml = `<!DOCTYPE html>
@@ -11,6 +11,7 @@ const receiptTemplateHtml = `<!DOCTYPE html>
     <style>
       @page {
         margin: 30px;
+        size: A4;
       }
       body {
         font-family: Arial, sans-serif;
@@ -19,9 +20,10 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         position: relative;
       }
       .receipt-container {
-        page-break-inside: avoid;
-        page-break-before: auto;
-        page-break-after: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 98vh; /* Use viewport height to manage space */
       }
 
       .flex-wrap {
@@ -164,12 +166,12 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         margin: 20px;
       }
 
-      /* Ensure both receipts fit in one page */
       .receipt {
         page-break-inside: avoid;
-        border-bottom: 2px dashed #000;
-        margin-bottom: 15px;
         padding-bottom: 15px;
+      }
+      .receipt.original {
+         border-bottom: 2px dashed #000;
       }
 
       .form_data {
@@ -183,12 +185,12 @@ const receiptTemplateHtml = `<!DOCTYPE html>
   <body>
     <div class="receipt-container">
       <!-- ORIGINAL -->
-      <div class="content receipt">
+      <div class="content receipt original">
         <header>
-          <div class="right">Original</div>
           <div class="logo">
             <img src="{{ logo_url }}" alt="logo" />
           </div>
+          <div class="right">Original</div>
         </header>
 
         <div class="title">KP ENTERPRISE</div>
@@ -292,10 +294,10 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       <!-- DUPLICATE -->
       <div class="content receipt">
         <header>
-          <div class="right">Duplicate</div>
           <div class="logo">
             <img src="{{ logo_url }}" alt="logo" />
           </div>
+          <div class="right">Duplicate</div>
         </header>
 
         <div class="title">KP ENTERPRISE</div>
@@ -402,13 +404,13 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
-handlebars.registerHelper('ne', function (a, b) {
-  return a !== b;
-});
-
 export async function generatePdfAction(formData: any) {
   try {
-    const template = handlebars.compile(receiptTemplateHtml);
+    Handlebars.registerHelper('ne', function (a, b) {
+      return a !== b;
+    });
+
+    const template = Handlebars.compile(receiptTemplateHtml);
 
     const total = Number(formData.amount) || 0;
     const salesAmount = Number(formData.sales_amount) || 0;
