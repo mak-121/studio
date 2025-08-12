@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Download, Loader2 } from 'lucide-react';
+import { Printer, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,8 +41,7 @@ const formSchema = z.object({
 
 export function PagePilotClient() {
   const { toast } = useToast();
-  const [status, setStatus] = useState<'idle' | 'generating' | 'success' | 'error'>('idle');
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [status, setStatus] = useState<'idle' | 'generating' | 'error'>('idle');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,10 +85,6 @@ export function PagePilotClient() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus('generating');
-    if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-        setPdfUrl(null);
-    }
 
     const finalValues = { ...values };
     if (values.payment_mode === 'Other') {
@@ -100,43 +95,35 @@ export function PagePilotClient() {
 
     if (result.success && result.data) {
         try {
-            const byteCharacters = atob(result.data);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+            const printFrame = document.createElement('iframe');
+            printFrame.style.display = 'none';
+            document.body.appendChild(printFrame);
+
+            const printDoc = printFrame.contentWindow?.document;
+            if (printDoc) {
+                printDoc.open();
+                printDoc.write(result.data);
+                printDoc.close();
+                
+                printFrame.contentWindow?.focus();
+
+                // Use a timeout to ensure content is rendered before printing
+                setTimeout(() => {
+                    printFrame.contentWindow?.print();
+                    document.body.removeChild(printFrame);
+                    setStatus('idle');
+                }, 500);
+            } else {
+                 throw new Error("Could not access print frame document.");
             }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-            const url = URL.createObjectURL(blob);
-            setPdfUrl(url);
-            setStatus('success');
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `receipt_${values.receipt_no}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-        } catch (e) {
+        } catch (e: any) {
             setStatus('error');
-            toast({ variant: "destructive", title: "PDF Display Error", description: 'There was an issue displaying the generated PDF.' });
+            toast({ variant: "destructive", title: "Print Error", description: `There was an issue preparing the document for printing: ${e.message}` });
         }
     } else {
         setStatus('error');
-        toast({ variant: "destructive", title: "PDF Generation Failed", description: result.error });
+        toast({ variant: "destructive", title: "HTML Generation Failed", description: result.error });
     }
-  };
-
-  const handleDownload = () => {
-    if (!pdfUrl) return;
-    const a = document.createElement('a');
-    a.href = pdfUrl;
-    a.download = `receipt_${form.getValues('receipt_no')}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   };
   
   const isLoading = status === 'generating';
@@ -227,15 +214,9 @@ export function PagePilotClient() {
         </fieldset>
         
         <Button type="submit" className="w-full mt-8" disabled={isLoading || !isValid}>
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Generate PDF Receipt
+          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Printer className="mr-2 h-4 w-4" />}
+          Generate & Print Receipt
         </Button>
-        {status === 'success' && pdfUrl && (
-             <Button onClick={handleDownload} className="w-full mt-2" variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                Download Again
-            </Button>
-        )}
       </form>
     </Form>
     </div>

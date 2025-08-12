@@ -1,8 +1,6 @@
 'use server';
 
 import handlebars from 'handlebars';
-import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium';
 import { toWords } from 'number-to-words';
 
 const receiptTemplateHtml = `<!DOCTYPE html>
@@ -404,13 +402,11 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
-// Register the helper once, outside the function.
 handlebars.registerHelper('ne', function (a, b) {
   return a !== b;
 });
 
 export async function generatePdfAction(formData: any) {
-  let browser;
   try {
     const template = handlebars.compile(receiptTemplateHtml);
 
@@ -431,30 +427,10 @@ export async function generatePdfAction(formData: any) {
     };
 
     const html = template(templateData);
-
-    browser = await puppeteer.launch({ 
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
-    });
-
-    const page = await browser.newPage();
     
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-    });
-    
-    return { success: true, data: pdfBuffer.toString('base64') };
+    return { success: true, data: html };
   } catch (error: any) {
-    console.error('PDF generation failed:', error);
-    return { success: false, error: `Failed to generate PDF: ${error.message}` };
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
+    console.error('HTML generation failed:', error);
+    return { success: false, error: `Failed to generate HTML: ${error.message}` };
   }
 }
