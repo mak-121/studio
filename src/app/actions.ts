@@ -168,6 +168,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       .receipt {
         page-break-inside: avoid;
         padding-bottom: 15px;
+        height: 49vh;
+        display: flex;
+        flex-direction: column;
       }
       .receipt.original {
          border-bottom: 2px dashed #000;
