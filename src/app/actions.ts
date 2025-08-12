@@ -1,6 +1,6 @@
 'use server';
 
-import * as handlebars from 'handlebars';
+import handlebars from 'handlebars';
 import puppeteer from 'puppeteer';
 import { toWords } from 'number-to-words';
 
