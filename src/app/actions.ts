@@ -2,7 +2,7 @@
 
 import * as handlebars from 'handlebars';
 import puppeteer from 'puppeteer';
-import num2words from 'num2words';
+import { toWords } from 'number-to-words';
 
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
@@ -416,7 +416,7 @@ export async function generatePdfAction(formData: any) {
     const templateData = {
         ...formData,
         amount_formatted: formatNumber(total),
-        amount_words: (num2words as any)(total, { lang: 'en-IN' }).replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        amount_words: toWords(total).replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
