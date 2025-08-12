@@ -1,4 +1,14 @@
 import type {Config} from 'tailwindcss';
+import { fontFamily } from 'tailwindcss/defaultTheme';
+
+function withOpacity(variableName: string) {
+  return ({ opacityValue }: { opacityValue?: number }) => {
+    if (opacityValue !== undefined) {
+      return `hsla(var(${variableName}), ${opacityValue})`;
+    }
+    return `hsl(var(${variableName}))`;
+  };
+}
 
 export default {
   darkMode: ['class'],
@@ -17,60 +27,63 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['"Source Serif Pro"', 'serif'],
-        headline: ['Poppins', 'sans-serif'],
-        code: ['monospace'],
+        body: ['var(--font-body)', ...fontFamily.sans],
+        headline: ['var(--font-headline)', ...fontFamily.sans],
+        sans: ['var(--font-inter)'],
+        serif: ['var(--font-literata)'],
+        poppins: ['var(--font-poppins)'],
+        'source-serif': ['var(--font-source-serif)'],
       },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        background: withOpacity('--background'),
+        foreground: withOpacity('--foreground'),
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: withOpacity('--card'),
+          foreground: withOpacity('--card-foreground'),
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: withOpacity('--popover'),
+          foreground: withOpacity('--popover-foreground'),
         },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: withOpacity('--primary'),
+          foreground: withOpacity('--primary-foreground'),
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          DEFAULT: withOpacity('--secondary'),
+          foreground: withOpacity('--secondary-foreground'),
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: withOpacity('--muted'),
+          foreground: withOpacity('--muted-foreground'),
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: withOpacity('--accent'),
+          foreground: withOpacity('--accent-foreground'),
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: withOpacity('--destructive'),
+          foreground: withOpacity('--destructive-foreground'),
         },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
+        border: withOpacity('--border'),
+        input: withOpacity('--input'),
+        ring: withOpacity('--ring'),
         chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
+          '1': withOpacity('--chart-1'),
+          '2': withOpacity('--chart-2'),
+          '3': withOpacity('--chart-3'),
+          '4': withOpacity('--chart-4'),
+          '5': withOpacity('--chart-5'),
         },
         sidebar: {
-          DEFAULT: 'hsl(var(--sidebar-background))',
-          foreground: 'hsl(var(--sidebar-foreground))',
-          primary: 'hsl(var(--sidebar-primary))',
-          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-          accent: 'hsl(var(--sidebar-accent))',
-          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-          border: 'hsl(var(--sidebar-border))',
-          ring: 'hsl(var(--sidebar-ring))',
+          DEFAULT: withOpacity('--sidebar-background'),
+          foreground: withOpacity('--sidebar-foreground'),
+          primary: withOpacity('--sidebar-primary'),
+          'primary-foreground': withOpacity('--sidebar-primary-foreground'),
+          accent: withOpacity('--sidebar-accent'),
+          'accent-foreground': withOpacity('--sidebar-accent-foreground'),
+          border: withOpacity('--sidebar-border'),
+          ring: withOpacity('--sidebar-ring'),
         },
       },
       borderRadius: {
@@ -102,5 +115,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config;

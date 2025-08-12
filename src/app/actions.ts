@@ -382,23 +382,22 @@ function sanitizeCsvValue(value: any): string {
 export async function recordToCsvAction(formData: any) {
   try {
     const filePath = path.join(process.cwd(), 'receipt_log.csv');
-    
-    // Use the predefined headers to ensure consistent order.
     const csvRow = CSV_HEADERS.map(header => sanitizeCsvValue(formData[header])).join(',');
 
-    let fileExists = false;
+    let fileContent = '';
     try {
-      await fs.access(filePath);
-      fileExists = true;
-    } catch (e) {
-      // File doesn't exist, will be created.
+      fileContent = await fs.readFile(filePath, 'utf-8');
+    } catch (error: any) {
+      if (error.code === 'ENOENT') {
+        // File doesn't exist, create it with headers
+        const headerRow = CSV_HEADERS.join(',');
+        await fs.writeFile(filePath, headerRow + '\n');
+      } else {
+        throw error; // Other errors
+      }
     }
 
-    if (!fileExists) {
-      const headerRow = CSV_HEADERS.join(',');
-      await fs.writeFile(filePath, headerRow + '\n');
-    }
-
+    // Append new row
     await fs.appendFile(filePath, csvRow + '\n');
     
     return { success: true };
