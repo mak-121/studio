@@ -12,7 +12,7 @@ export function MovingBorderButton({
   return (
     <button
       className={cn(
-        "bg-transparent relative p-0.5 rounded-lg",
+        "bg-transparent relative p-0.5 rounded-full",
         className
       )}
       style={{
@@ -21,11 +21,11 @@ export function MovingBorderButton({
       }}
       {...props}
     >
-      <span className="absolute-center h-full w-full rounded-lg bg-background" />
+      <span className="absolute-center h-full w-full rounded-full bg-background" />
       <span
         className={cn(
           "relative z-10 flex items-center justify-center gap-2",
-          "h-14 w-14 rounded-lg bg-foreground px-4 py-2 text-background",
+          "h-12 w-12 rounded-full bg-foreground px-4 py-2 text-background",
           "transition-transform duration-100 ease-in-out",
           "active:translate-y-px"
         )}
