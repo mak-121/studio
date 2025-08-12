@@ -2,25 +2,13 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Check, Palette, FontText, Monitor, Moon, Sun } from 'lucide-react';
+import { Check, Moon, Sun } from 'lucide-react';
 import { useConfig } from '@/hooks/use-config';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { themes } from '@/lib/themes';
 import { cn } from '@/lib/utils';
-import {
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarSeparator,
-} from './ui/sidebar';
 import { Label } from './ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 export function ThemeCustomizer() {
   const [config, setConfig] = useConfig();
@@ -32,14 +20,14 @@ export function ThemeCustomizer() {
   };
 
   return (
-    <SidebarContent>
-      <SidebarHeader>
-        <h2 className="text-lg font-bold">Theme Settings</h2>
-      </SidebarHeader>
-      <SidebarSeparator />
-      <SidebarGroup>
-        <SidebarGroupLabel>Color Palette</SidebarGroupLabel>
-        <div className="flex flex-wrap gap-2">
+    <div className="p-4 space-y-6">
+      <div>
+        <h3 className="text-xl font-semibold mb-4">Customize Theme</h3>
+      </div>
+
+      <div className="space-y-4">
+        <Label className="text-base">Color Palette</Label>
+        <div className="grid grid-cols-2 gap-2">
           {themes.map((theme) => {
             const isActive = config.theme === theme.name;
             return (
@@ -51,7 +39,7 @@ export function ThemeCustomizer() {
                   setConfig({ ...config, theme: theme.name });
                 }}
                 className={cn(
-                  'justify-start',
+                  'justify-start h-12',
                   isActive && 'border-2 border-primary'
                 )}
                 style={
@@ -64,7 +52,7 @@ export function ThemeCustomizer() {
               >
                 <span
                   className={cn(
-                    'mr-1.5 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]'
+                    'mr-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[--theme-primary]'
                   )}
                 >
                   {isActive && <Check className="h-4 w-4 text-white" />}
@@ -74,59 +62,55 @@ export function ThemeCustomizer() {
             );
           })}
         </div>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>Font</SidebarGroupLabel>
-        <div className="flex flex-wrap gap-2">
+      </div>
+
+      <div className="space-y-4">
+        <Label className="text-base">Font</Label>
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant={config.font === 'inter' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => handleFontChange('inter')}
           >
             Inter
           </Button>
            <Button
             variant={config.font === 'poppins' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => handleFontChange('poppins')}
           >
             Poppins
           </Button>
           <Button
             variant={config.font === 'literata' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => handleFontChange('literata')}
           >
             Literata
           </Button>
            <Button
             variant={config.font === 'source-serif' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => handleFontChange('source-serif')}
           >
             Source Serif
           </Button>
         </div>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>Mode</SidebarGroupLabel>
-        <div className="flex gap-2">
+      </div>
+
+      <div className="space-y-4">
+        <Label className="text-base">Mode</Label>
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant={mode === 'light' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => setMode('light')}
           >
             <Sun className="mr-2" /> Light
           </Button>
           <Button
             variant={mode === 'dark' ? 'default' : 'outline'}
-            size="sm"
             onClick={() => setMode('dark')}
           >
             <Moon className="mr-2" /> Dark
           </Button>
         </div>
-      </SidebarGroup>
-    </SidebarContent>
+      </div>
+    </div>
   );
 }
