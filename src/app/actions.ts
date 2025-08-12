@@ -404,13 +404,13 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
-handlebars.registerHelper('ne', function (a, b) {
-  return a !== b;
-});
-
 export async function generatePdfAction(formData: any) {
   let browser;
   try {
+    handlebars.registerHelper('ne', function (a, b) {
+      return a !== b;
+    });
+
     const template = handlebars.compile(receiptTemplateHtml);
 
     const total = Number(formData.amount) || 0;
@@ -432,7 +432,7 @@ export async function generatePdfAction(formData: any) {
     const html = template(templateData);
 
     browser = await puppeteer.launch({ 
-      args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
+      args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
       headless: chromium.headless,
