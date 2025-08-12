@@ -2,11 +2,9 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Check, Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { useConfig } from '@/hooks/use-config';
 import { Button } from '@/components/ui/button';
-import { themes } from '@/lib/themes';
-import { cn } from '@/lib/utils';
 import { Label } from './ui/label';
 
 export function ThemeCustomizer() {
@@ -15,45 +13,21 @@ export function ThemeCustomizer() {
 
   return (
     <div className="p-4 space-y-6">
-      <div className="space-y-4">
-        <Label className="text-base">Color Palette</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {themes.map((theme) => {
-            const isActive = config.theme === theme.name;
-            return (
-              <Button
-                variant={'outline'}
-                size="sm"
-                key={theme.name}
-                onClick={() => {
-                  setConfig({ ...config, theme: theme.name });
-                }}
-                className={cn(
-                  'justify-start h-12',
-                  isActive && 'border-2 border-primary'
-                )}
-                style={
-                  {
-                    '--theme-primary': `hsl(${
-                      theme?.activeColor[mode === 'dark' ? 'dark' : 'light']
-                    })`,
-                  } as React.CSSProperties
-                }
-              >
-                <span
-                  className={cn(
-                    'mr-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[--theme-primary]'
-                  )}
-                >
-                  {isActive && <Check className="h-4 w-4 text-white" />}
-                </span>
-                {theme.label}
-              </Button>
-            );
-          })}
+       <div className="space-y-4">
+        <Label className="text-base">Accent Color</Label>
+        <div className="flex items-center space-x-2">
+           <input
+            type="color"
+            value={config.accentColor}
+            onChange={(e) =>
+              setConfig({ ...config, accentColor: e.target.value })
+            }
+            className="w-12 h-10 rounded-lg border p-1"
+          />
+          <span className="text-sm text-muted-foreground">Custom</span>
         </div>
       </div>
-
+      
       <div className="space-y-4">
         <Label className="text-base">Font</Label>
         <div className="grid grid-cols-2 gap-2">

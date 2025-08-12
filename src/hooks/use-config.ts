@@ -4,13 +4,13 @@ import { useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
 type Config = {
-  theme: string;
   font: string;
+  accentColor: string;
 };
 
 const configAtom = atomWithStorage<Config>('config', {
-  theme: 'orange',
   font: 'poppins',
+  accentColor: '#f97316', // Default to a nice orange
 });
 
 export function useConfig() {
