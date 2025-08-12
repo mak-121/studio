@@ -405,6 +405,8 @@ const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFr
 
 export async function generatePdfAction(formData: any) {
   try {
+    const template = handlebars.compile(receiptTemplateHtml);
+
     handlebars.registerHelper('ne', function (a, b) {
       return a !== b;
     });
@@ -425,7 +427,6 @@ export async function generatePdfAction(formData: any) {
         logo_url: `https://placehold.co/140x60.png`,
     };
 
-    const template = handlebars.compile(receiptTemplateHtml);
     const html = template(templateData);
 
     const browser = await puppeteer.launch({ 
