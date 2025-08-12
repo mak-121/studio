@@ -5,3 +5,5 @@ receipt_no,date,name,plot_type,plot_number,plot,payment_mode,bank,branch,cheque_
 1112011,2025-08-12,Leaf Link,Flat No. 1201,Cheque,SBI,Nikol,12002,1200,0,0,1200
 1112011,2025-08-12,Leaf Link,Flat No. 120,Cash,,,,1199,0,0,1199
 1112011,2025-08-12,Patel Mak ,Flat No. 1201,Cash,,,,12010,0,0,12010
+1112011,2025-08-12,Patel Mak ,Flat No. 1201,Cash,,,,1199,0,0,1199
+1112011,2025-08-12,Patel Mak ,Flat No. 1201,Cash,,,,1199,0,0,1199

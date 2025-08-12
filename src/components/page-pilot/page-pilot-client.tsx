@@ -108,15 +108,26 @@ export function PagePilotClient() {
     const result = await generatePdfAction(finalValues);
     
     if (result.success && result.data) {
-        // Also record to CSV
+        // Record to CSV
         const csvResult = await recordToCsvAction(finalValues);
         if (!csvResult.success) {
             console.error("Failed to record to CSV:", csvResult.error);
-            // Optionally notify user of CSV write failure
             toast({ variant: "destructive", title: "CSV Write Error", description: "Could not save the record to the log file." });
         }
 
         try {
+            // Automatic Download
+            const blob = new Blob([result.data], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `receipt_${values.receipt_no}.html`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            // Open Print Dialog
             const printWindow = window.open('', '_blank');
             if (printWindow) {
                 printWindow.document.write(result.data);
@@ -125,14 +136,13 @@ export function PagePilotClient() {
                     printWindow.focus();
                     printWindow.print();
                 };
-                 setStatus('idle');
             } else {
-                setStatus('error');
                 toast({ variant: "destructive", title: "Print Error", description: "Could not open print window. Please disable your pop-up blocker." });
             }
+            setStatus('idle');
         } catch (e: any) {
             setStatus('error');
-            toast({ variant: "destructive", title: "Print Error", description: `There was an issue preparing the document for printing: ${e.message}` });
+            toast({ variant: "destructive", title: "Action Error", description: `There was an issue triggering the download or print: ${e.message}` });
         }
     } else {
         setStatus('error');
