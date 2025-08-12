@@ -40,7 +40,7 @@ export function Header() {
           <BookMarked className="h-6 w-6 text-primary" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">
-          PagePilot
+          LedgerFlow
         </h1>
       </div>
       <Button onClick={handleDownload} disabled={isDownloading}>

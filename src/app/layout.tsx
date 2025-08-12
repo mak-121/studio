@@ -5,8 +5,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'PagePilot',
-  description: 'Convert HTML and CSS to PDF with AI-powered layout improvements.',
+  title: 'LedgerFlow',
+  description: 'Generate professional receipts and documents with ease.',
 };
 
 const inter = Inter({

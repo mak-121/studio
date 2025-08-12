@@ -3,8 +3,8 @@
 
 import { Palette } from 'lucide-react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Header } from '@/components/page-pilot/header';
-import { PagePilotClient } from '@/components/page-pilot/page-pilot-client';
+import { Header } from '@/components/ledger-flow/header';
+import { LedgerFlowClient } from '@/components/ledger-flow/ledger-flow-client';
 import { ThemeCustomizer } from '@/components/theme-customizer';
 import { MovingBorderButton } from '@/components/ui/moving-border-button';
 
@@ -13,7 +13,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-1 container mx-auto">
-        <PagePilotClient />
+        <LedgerFlowClient />
       </main>
       <div className="fixed bottom-6 right-6 z-50">
         <Sheet>

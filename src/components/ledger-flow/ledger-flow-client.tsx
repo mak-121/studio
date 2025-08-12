@@ -52,7 +52,7 @@ const formSchema = z.object({
     path: ["branch"],
 });
 
-export function PagePilotClient() {
+export function LedgerFlowClient() {
   const [config] = useConfig();
   const { toast } = useToast();
   const [status, setStatus] = useState<'idle' | 'generating' | 'error'>('idle');
