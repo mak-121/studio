@@ -23,7 +23,6 @@ const receiptTemplateHtml = `<!DOCTYPE html>
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        height: 98vh;
       }
 
       .flex-wrap {
@@ -169,12 +168,10 @@ const receiptTemplateHtml = `<!DOCTYPE html>
       .receipt {
         page-break-inside: avoid;
         padding-bottom: 15px;
-        height: 49vh;
-        display: flex;
-        flex-direction: column;
       }
       .receipt.original {
          border-bottom: 2px dashed #000;
+         margin-bottom: 15px;
       }
 
       .form_data {
