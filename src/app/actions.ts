@@ -400,14 +400,15 @@ const receiptTemplateHtml = `<!DOCTYPE html>
   </body>
 </html>
 `;
-handlebars.registerHelper('ne', function (a, b) {
-  return a !== b;
-});
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
 export async function generatePdfAction(formData: any) {
   try {
+    handlebars.registerHelper('ne', function (a, b) {
+      return a !== b;
+    });
+
     const total = Number(formData.amount) || 0;
     const salesAmount = Number(formData.sales_amount) || 0;
     const extraWork = Number(formData.extra_work) || 0;
