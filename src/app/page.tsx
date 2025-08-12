@@ -2,11 +2,11 @@
 'use client';
 
 import { Palette } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Header } from '@/components/page-pilot/header';
 import { PagePilotClient } from '@/components/page-pilot/page-pilot-client';
 import { ThemeCustomizer } from '@/components/theme-customizer';
+import { MovingBorderButton } from '@/components/ui/moving-border-button';
 
 export default function Home() {
   return (
@@ -18,10 +18,9 @@ export default function Home() {
       <div className="fixed bottom-6 right-6 z-50">
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="icon" className="h-14 w-14 rounded-full shadow-lg">
-              <Palette className="h-6 w-6" />
-              <span className="sr-only">Customize Theme</span>
-            </Button>
+            <MovingBorderButton>
+              <Palette />
+            </MovingBorderButton>
           </SheetTrigger>
           <SheetContent className="w-[320px] sm:w-[400px]">
             <SheetHeader>

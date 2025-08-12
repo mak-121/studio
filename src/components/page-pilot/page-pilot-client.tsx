@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -131,7 +132,7 @@ export function PagePilotClient() {
   return (
     <div className="flex justify-center items-start min-h-screen py-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border-t-4 border-primary">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border border-border/50 border-t-4 border-primary">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">KP ENTERPRISE</h1>
           <p className="text-muted-foreground">Receipt Data Entry</p>
