@@ -8,7 +8,7 @@ body {
 
 @layer base {
   :root {
-    --background: 36 67% 97%; /* #fdf9f2 */
+    --background: 35 50% 90%; /* Darker cream */
     --foreground: 24 10% 20%;
 
     --card: 30 50% 98%;
@@ -17,7 +17,7 @@ body {
     --popover: 30 50% 98%;
     --popover-foreground: 24 10% 20%;
 
-    --primary: 25 84% 68%; /* #f5a278 */
+    --primary: 25 84% 68%; /* Soft Terracotta */
     --primary-foreground: 15 25% 10%;
 
     --secondary: 30 25% 94%;
@@ -26,7 +26,7 @@ body {
     --muted: 30 25% 94%;
     --muted-foreground: 25 15% 45%;
 
-    --accent: 24 90% 60%; /* #f58a5c */
+    --accent: 24 90% 60%; /* Saturated Orange */
     --accent-foreground: 15 25% 10%;
 
     --destructive: 0 84.2% 60.2%;
