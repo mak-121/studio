@@ -1,13 +1,11 @@
 {
   "hosting": {
-    "site": "ledgerflow",
-    "rewrites": [
-      {
-        "source": "**",
-        "apphosting": {
-          "backendId": "ledgerflow"
-        }
-      }
-    ]
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "apphosting": true
   }
 }
