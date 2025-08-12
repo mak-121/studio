@@ -115,15 +115,6 @@ export function PagePilotClient() {
         }
 
         try {
-            // Trigger PDF download
-            const blob = new Blob([result.data], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `receipt_${finalValues.receipt_no}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
             const printWindow = window.open('', '_blank');
             if (printWindow) {
                 printWindow.document.write(result.data);
