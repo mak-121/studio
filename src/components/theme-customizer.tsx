@@ -6,6 +6,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useConfig } from '@/hooks/use-config';
 import { Button } from '@/components/ui/button';
 import { Label } from './ui/label';
+import { Slider } from './ui/slider';
 
 export function ThemeCustomizer() {
   const [config, setConfig] = useConfig();
@@ -55,6 +56,20 @@ export function ThemeCustomizer() {
           >
             Source Serif
           </Button>
+        </div>
+      </div>
+      
+      <div className="space-y-4">
+        <Label className="text-base">Border Thickness</Label>
+        <Slider
+          min={0}
+          max={10}
+          step={1}
+          value={[config.borderWidth ?? 1]}
+          onValueChange={(value) => setConfig({ ...config, borderWidth: value[0] })}
+        />
+        <div className="text-sm text-muted-foreground text-center">
+          {config.borderWidth ?? 1}px
         </div>
       </div>
 

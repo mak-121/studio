@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generatePdfAction, recordToCsvAction } from '@/app/actions';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
+import { useConfig } from '@/hooks/use-config';
 
 const formSchema = z.object({
   receipt_no: z.string().min(1, "Receipt number is required."),
@@ -52,6 +53,7 @@ const formSchema = z.object({
 });
 
 export function PagePilotClient() {
+  const [config] = useConfig();
   const { toast } = useToast();
   const [status, setStatus] = useState<'idle' | 'generating' | 'error'>('idle');
 
@@ -143,7 +145,11 @@ export function PagePilotClient() {
   return (
     <div className="flex justify-center items-start min-h-screen py-10">
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border border-border/50">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full max-w-2xl bg-card p-10 rounded-xl shadow-lg border-border/50"
+        style={{ borderWidth: `${config.borderWidth}px` }}
+        >
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">KP ENTERPRISE</h1>
           <p className="text-muted-foreground">Receipt Data Entry</p>
