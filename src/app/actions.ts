@@ -4,8 +4,6 @@ import * as handlebars from 'handlebars';
 import puppeteer from 'puppeteer';
 import num2words from 'num2words';
 
-// This is a placeholder for your actual receipt template.
-// In a real app, you might read this from a file.
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
   <head>
@@ -402,13 +400,10 @@ const receiptTemplateHtml = `<!DOCTYPE html>
   </body>
 </html>
 `;
-
-// Helper for handlebars to check for inequality
 handlebars.registerHelper('ne', function (a, b) {
   return a !== b;
 });
 
-// A simple function to format numbers with commas
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
 export async function generatePdfAction(formData: any) {
@@ -432,16 +427,12 @@ export async function generatePdfAction(formData: any) {
     const template = handlebars.compile(receiptTemplateHtml);
     const html = template(templateData);
 
-    // Launch Puppeteer
     const browser = await puppeteer.launch({ 
       headless: true,
-      // Note: You might need to install chrome on your environment
-      // executablePath: '/usr/bin/google-chrome-stable', 
       args: ['--no-sandbox', '--disable-setuid-sandbox'] 
     });
     const page = await browser.newPage();
     
-    // Set content and generate PDF
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({
         format: 'A4',

@@ -25,9 +25,9 @@ const formSchema = z.object({
   bank: z.string().optional(),
   branch: z.string().optional(),
   cheque_no: z.string().optional(),
-  sales_amount: z.coerce.number().min(0, "Sales amount is required."),
-  extra_work: z.coerce.number().optional(),
-  other_receipts: z.coerce.number().optional(),
+  sales_amount: z.string().min(1, "Sales amount is required."),
+  extra_work: z.string().optional(),
+  other_receipts: z.string().optional(),
   amount: z.coerce.number(),
 }).refine((data) => {
     if (data.payment_mode !== 'Cash' && !data.cheque_no) {
@@ -57,9 +57,9 @@ export function PagePilotClient() {
       bank: '',
       branch: '',
       cheque_no: '',
-      sales_amount: 0,
-      extra_work: 0,
-      other_receipts: 0,
+      sales_amount: "0",
+      extra_work: "0",
+      other_receipts: "0",
       amount: 0,
     },
   });
@@ -112,7 +112,6 @@ export function PagePilotClient() {
             setPdfUrl(url);
             setStatus('success');
             
-            // Auto-download the PDF
             const a = document.createElement('a');
             a.href = url;
             a.download = `receipt_${values.receipt_no}.pdf`;
@@ -152,7 +151,7 @@ export function PagePilotClient() {
         </div>
 
         <fieldset className="mb-6">
-          <legend className="text-lg font-semibold text-primary w-full border-b pb-2 mb-4">Recipient & Property Details</legend>
+          <legend className="text-lg font-semibold text-primary w-full border-b pb-2 mb-4">Recipient &amp; Property Details</legend>
           <FormField control={form.control} name="receipt_no" render={({ field }) => (
             <FormItem className="mb-4"><FormLabel>Receipt No:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
           )} />
@@ -242,5 +241,3 @@ export function PagePilotClient() {
     </div>
   );
 }
-
-    
