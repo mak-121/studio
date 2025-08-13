@@ -4,6 +4,7 @@ import Handlebars from 'handlebars';
 import { toWords } from 'number-to-words';
 import fs from 'fs/promises';
 import path from 'path';
+import os from 'os';
 
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
@@ -359,7 +360,7 @@ export async function generatePdfAction(formData: any) {
   }
 }
 
-const CSV_FILE_PATH = path.join(process.cwd(), 'receipt_log.csv');
+const CSV_FILE_PATH = path.join(os.tmpdir(), 'receipt_log.csv');
 const CSV_HEADERS = [
     'receipt_no', 'date', 'name', 'plot',
     'payment_mode', 'bank', 'branch', 'cheque_no',
