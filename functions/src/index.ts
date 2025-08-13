@@ -1,13 +1,15 @@
-import * as functions from 'firebase-functions';
+import { https } from 'firebase-functions';
 import next from 'next';
+import path from 'path';
 
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({
-  dev,
-  conf: { distDir: '.next' }
+const isDev = process.env.NODE_ENV !== 'production';
+
+const nextApp = next({
+  dev: isDev,
+  conf: { distDir: path.join('.next') },
 });
-const handle = app.getRequestHandler();
+const handle = nextApp.getRequestHandler();
 
-export const nextServer = functions.https.onRequest((req, res) => {
-  return app.prepare().then(() => handle(req, res));
+export const nextServer = https.onRequest((req, res) => {
+  return nextApp.prepare().then(() => handle(req, res));
 });
