@@ -19,6 +19,7 @@ module.exports = {
   },
   ignorePatterns: [
     "/lib/**/*", // Ignore built files.
+    "/.next/**/*", // Ignore next build files.
     "/generated/**/*", // Ignore generated files.
   ],
   plugins: [
