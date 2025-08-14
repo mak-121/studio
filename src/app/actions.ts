@@ -209,9 +209,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
             1) Subject to realisation of Cheque / NEFT / RTGS / Online payments
           </div>
           <div>2) Subject to Ahmedabad Jurisdiction</div>
-          <div>GST Reg. No.: 24AEKFS0517C1ZG</div>
+          <div>GST Reg. No.: 24AAYFK8118R1ZA</div>
           <div>
-            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA09123/011021
+            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA12405/101023
           </div>
         </footer>
       </div>
@@ -316,9 +316,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
             1) Subject to realisation of Cheque / NEFT / RTGS / Online payments
           </div>
           <div>2) Subject to Ahmedabad Jurisdiction</div>
-          <div>GST Reg. No.: 24AEKFS0517C1ZG</div>
+          <div>GST Reg. No.: 24AAYFK8118R1ZA</div>
           <div>
-            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA09123/011021
+            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA12405/101023
           </div>
         </footer>
       </div>
@@ -423,3 +423,5 @@ export async function downloadCsvAction() {
         return { success: false, error: `Failed to read CSV file: ${error.message}` };
     }
 }
+
+    
