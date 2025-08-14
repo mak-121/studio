@@ -1,3 +1,4 @@
+
 'use server';
 
 import Handlebars from 'handlebars';
@@ -350,12 +351,16 @@ export async function generatePdfAction(formData: any) {
     const salesAmount = Number(formData.sales_amount) || 0;
     const extraWork = Number(formData.extra_work) || 0;
     const otherReceipts = Number(formData.other_receipts) || 0;
+    
+    const amountInWords = toWords(total, { currency: true, ignoreDecimal: true });
+    const decimalPart = Math.round((total - Math.floor(total)) * 100);
+    const decimalInWords = decimalPart > 0 ? ` and ${toWords(decimalPart)} Paise` : '';
 
     const templateData = {
         ...formData,
         date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
-        amount_words: toWords(total).replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        amount_words: (amountInWords + decimalInWords).replace(/,/g, '').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
@@ -422,3 +427,5 @@ export async function downloadCsvAction() {
         return { success: false, error: `Failed to read CSV file: ${error.message}` };
     }
 }
+
+    
