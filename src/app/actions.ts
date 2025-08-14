@@ -1,3 +1,4 @@
+
 'use server';
 
 import Handlebars from 'handlebars';
@@ -332,7 +333,7 @@ const formatDate = (dateString: string) => {
     try {
         const [year, month, day] = dateString.split('-');
         if (!year || !month || !day) return dateString; // Return original if format is unexpected
-        return `${day}-${month}-${year.slice(-2)}`;
+        return `${day}-${month}-${year}`;
     } catch (e) {
         return dateString; // Return original on error
     }

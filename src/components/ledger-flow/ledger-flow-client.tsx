@@ -120,17 +120,6 @@ export function LedgerFlowClient() {
         }
 
         try {
-            // Automatic Download
-            const blob = new Blob([result.data], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `receipt_${values.receipt_no}.html`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
             // Open Print Dialog
             const printWindow = window.open('', '_blank');
             if (printWindow) {
@@ -146,7 +135,7 @@ export function LedgerFlowClient() {
             setStatus('idle');
         } catch (e: any) {
             setStatus('error');
-            toast({ variant: "destructive", title: "Action Error", description: `There was an issue triggering the download or print: ${e.message}` });
+            toast({ variant: "destructive", title: "Action Error", description: `There was an issue triggering the print dialog: ${e.message}` });
         }
     } else {
         setStatus('error');
@@ -271,5 +260,3 @@ export function LedgerFlowClient() {
     </div>
   );
 }
-
-    
