@@ -1,11 +1,14 @@
 {
   "name": "nextn-root",
   "private": true,
+  "workspaces": [
+    "functions"
+  ],
   "scripts": {
-    "dev": "cd functions && npm run dev",
-    "build": "cd functions && npm run build",
-    "start": "cd functions && npm run start",
-    "lint": "cd functions && npm run lint",
+    "dev": "npm run dev -w functions",
+    "build": "npm run build -w functions",
+    "start": "npm run start -w functions",
+    "lint": "npm run lint -w functions",
     "deploy": "firebase deploy"
   },
   "dependencies": {},
