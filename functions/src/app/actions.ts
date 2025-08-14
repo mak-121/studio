@@ -329,6 +329,11 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
+const formatDate = (dateString: string): string => {
+  const [year, month, day] = dateString.split('-');
+  return `${day}-${month}-${year.slice(-2)}`;
+};
+
 Handlebars.registerHelper('ne', function (a, b) {
   return a !== b;
 });
@@ -344,6 +349,7 @@ export async function generatePdfAction(formData: any) {
 
     const templateData = {
         ...formData,
+        date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
         amount_words: toWords(total).replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
@@ -378,7 +384,8 @@ function sanitizeCsvValue(value: any): string {
 
 export async function recordToCsvAction(formData: any) {
   try {
-    const csvRow = CSV_HEADERS.map(header => sanitizeCsvValue(formData[header])).join(',');
+    const csvData = { ...formData, date: formatDate(formData.date) };
+    const csvRow = CSV_HEADERS.map(header => sanitizeCsvValue(csvData[header])).join(',');
 
     try {
       // Check if file exists, if not, create it with a header

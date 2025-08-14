@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Printer, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -65,7 +66,7 @@ export function LedgerFlowClient() {
     mode: 'onChange',
     defaultValues: {
       receipt_no: '',
-      date: new Date().toISOString().split('T')[0],
+      date: format(new Date(), 'yyyy-MM-dd'),
       name: '',
       plot_type: 'Flat No.',
       plot_number: '',
@@ -184,7 +185,7 @@ export function LedgerFlowClient() {
               <FormItem><FormLabel>Type:</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                  <SelectContent><SelectItem value="Flat No.">Flat No.</SelectItem><SelectItem value="Plot No.">Plot No.</SelectItem></SelectContent>
+                  <SelectContent><SelectItem value="Flat No.">Flat No.</SelectItem><SelectItem value="Shop No.">Shop No.</SelectItem></SelectContent>
                 </Select><FormMessage />
               </FormItem>
             )} />
