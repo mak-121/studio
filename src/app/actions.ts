@@ -328,6 +328,16 @@ const receiptTemplateHtml = `<!DOCTYPE html>
 
 const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
 
+const formatDate = (dateString: string) => {
+    try {
+        const [year, month, day] = dateString.split('-');
+        if (!year || !month || !day) return dateString; // Return original if format is unexpected
+        return `${day}-${month}-${year.slice(-2)}`;
+    } catch (e) {
+        return dateString; // Return original on error
+    }
+};
+
 Handlebars.registerHelper('ne', function (a, b) {
   return a !== b;
 });
@@ -343,6 +353,7 @@ export async function generatePdfAction(formData: any) {
 
     const templateData = {
         ...formData,
+        date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
         amount_words: toWords(total).replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
