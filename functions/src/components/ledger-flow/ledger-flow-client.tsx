@@ -243,7 +243,11 @@ export function LedgerFlowClient() {
             <FormItem className="mb-4"><FormLabel>Sales Amount:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
           )} />
           <FormField control={form.control} name="extra_work" render={({ field }) => (
+<<<<<<< HEAD
             <FormItem className="mb-4"><FormLabel>Extra Work:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
+=======
+            <FormItem className="mb-4"><FormLabel>Extra Work:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormMessage>
+>>>>>>> 5e3d1c9 (i need format dd-mm-yyyy and instade of pdf html file automatically down)
           )} />
           <FormField control={form.control} name="other_receipts" render={({ field }) => (
             <FormItem className="mb-4"><FormLabel>Other Receipts:</FormLabel><FormControl><Input type="text" placeholder="0.00" {...field} /></FormControl><FormMessage /></FormItem>
