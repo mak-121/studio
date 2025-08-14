@@ -2,10 +2,40 @@
 'use server';
 
 import Handlebars from 'handlebars';
-import { toWords } from 'number-to-words';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
+
+// Custom function to convert number to words in Indian format
+const amountToWords = (amount: number): string => {
+  const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+  const convertLessThanThousand = (num: number): string => {
+    if (num === 0) return '';
+    if (num < 10) return ones[num];
+    if (num < 20) return teens[num - 10];
+    if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 !== 0 ? ' ' + ones[num % 10] : '');
+    return ones[Math.floor(num / 100)] + ' hundred' + (num % 100 !== 0 ? ' ' + convertLessThanThousand(num % 100) : '');
+  };
+
+  if (amount === 0) return 'Zero';
+
+  const crores = Math.floor(amount / 10000000);
+  const lakhs = Math.floor((amount % 10000000) / 100000);
+  const thousands = Math.floor((amount % 100000) / 1000);
+  const hundreds = Math.floor(amount % 1000);
+
+  let words = '';
+  if (crores > 0) words += convertLessThanThousand(crores) + ' crore ';
+  if (lakhs > 0) words += convertLessThanThousand(lakhs) + ' lakh ';
+  if (thousands > 0) words += convertLessThanThousand(thousands) + ' thousand ';
+  if (hundreds > 0) words += convertLessThanThousand(hundreds);
+
+  return words.trim().replace(/\s+/g, ' ');
+};
+
 
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
@@ -209,9 +239,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
             1) Subject to realisation of Cheque / NEFT / RTGS / Online payments
           </div>
           <div>2) Subject to Ahmedabad Jurisdiction</div>
-          <div>GST Reg. No.: 24AEKFS0517C1ZG</div>
+          <div>GST Reg. No.: 24AAYFK8118R1ZA</div>
           <div>
-            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA09123/011021
+            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA12405/101023
           </div>
         </footer>
       </div>
@@ -316,9 +346,9 @@ const receiptTemplateHtml = `<!DOCTYPE html>
             1) Subject to realisation of Cheque / NEFT / RTGS / Online payments
           </div>
           <div>2) Subject to Ahmedabad Jurisdiction</div>
-          <div>GST Reg. No.: 24AEKFS0517C1ZG</div>
+          <div>GST Reg. No.: 24AAYFK8118R1ZA</div>
           <div>
-            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA09123/011021
+            RERA Reg.No.: PR/GJ/AHMEDABAD/AHMEDABAD CITY/AUDA/MAA12405/101023
           </div>
         </footer>
       </div>
@@ -352,15 +382,20 @@ export async function generatePdfAction(formData: any) {
     const extraWork = Number(formData.extra_work) || 0;
     const otherReceipts = Number(formData.other_receipts) || 0;
     
-    const amountInWords = toWords(total, { currency: true, ignoreDecimal: true });
-    const decimalPart = Math.round((total - Math.floor(total)) * 100);
-    const decimalInWords = decimalPart > 0 ? ` and ${toWords(decimalPart)} Paise` : '';
+    const integerPart = Math.floor(total);
+    const decimalPart = Math.round((total - integerPart) * 100);
+
+    let finalWords = amountToWords(integerPart);
+    if (decimalPart > 0) {
+      finalWords += ' and ' + amountToWords(decimalPart) + ' paise';
+    }
+
 
     const templateData = {
         ...formData,
         date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
-        amount_words: (amountInWords + decimalInWords).replace(/,/g, '').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        amount_words: finalWords.replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
@@ -427,5 +462,3 @@ export async function downloadCsvAction() {
         return { success: false, error: `Failed to read CSV file: ${error.message}` };
     }
 }
-
-    

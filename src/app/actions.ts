@@ -2,10 +2,40 @@
 'use server';
 
 import Handlebars from 'handlebars';
-import { toWords } from 'number-to-words';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
+
+// Custom function to convert number to words in Indian format
+const amountToWords = (amount: number): string => {
+  const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+  const convertLessThanThousand = (num: number): string => {
+    if (num === 0) return '';
+    if (num < 10) return ones[num];
+    if (num < 20) return teens[num - 10];
+    if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 !== 0 ? ' ' + ones[num % 10] : '');
+    return ones[Math.floor(num / 100)] + ' hundred' + (num % 100 !== 0 ? ' ' + convertLessThanThousand(num % 100) : '');
+  };
+
+  if (amount === 0) return 'Zero';
+
+  const crores = Math.floor(amount / 10000000);
+  const lakhs = Math.floor((amount % 10000000) / 100000);
+  const thousands = Math.floor((amount % 100000) / 1000);
+  const hundreds = Math.floor(amount % 1000);
+
+  let words = '';
+  if (crores > 0) words += convertLessThanThousand(crores) + ' crore ';
+  if (lakhs > 0) words += convertLessThanThousand(lakhs) + ' lakh ';
+  if (thousands > 0) words += convertLessThanThousand(thousands) + ' thousand ';
+  if (hundreds > 0) words += convertLessThanThousand(hundreds);
+
+  return words.trim().replace(/\s+/g, ' ');
+};
+
 
 const receiptTemplateHtml = `<!DOCTYPE html>
 <html>
@@ -352,23 +382,20 @@ export async function generatePdfAction(formData: any) {
     const extraWork = Number(formData.extra_work) || 0;
     const otherReceipts = Number(formData.other_receipts) || 0;
     
-    // Correctly use en-IN for lakhs and construct the string manually
     const integerPart = Math.floor(total);
     const decimalPart = Math.round((total - integerPart) * 100);
 
-    const integerInWords = toWords(integerPart, { locale: 'en-IN' });
-    let amountInWords = integerInWords;
-
+    let finalWords = amountToWords(integerPart);
     if (decimalPart > 0) {
-      const decimalInWords = toWords(decimalPart, { locale: 'en-IN' });
-      amountInWords += ` and ${decimalInWords} paise`;
+      finalWords += ' and ' + amountToWords(decimalPart) + ' paise';
     }
+
 
     const templateData = {
         ...formData,
         date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
-        amount_words: amountInWords.replace(/,/g, '').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        amount_words: finalWords.replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
