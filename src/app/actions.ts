@@ -332,10 +332,10 @@ const formatNumber = (num: number) => new Intl.NumberFormat('en-IN', { minimumFr
 const formatDate = (dateString: string) => {
     try {
         const [year, month, day] = dateString.split('-');
-        if (!year || !month || !day) return dateString; // Return original if format is unexpected
+        if (!year || !month || !day) return dateString;
         return `${day}-${month}-${year}`;
     } catch (e) {
-        return dateString; // Return original on error
+        return dateString;
     }
 };
 
@@ -352,15 +352,23 @@ export async function generatePdfAction(formData: any) {
     const extraWork = Number(formData.extra_work) || 0;
     const otherReceipts = Number(formData.other_receipts) || 0;
     
-    const amountInWords = toWords(total, { currency: true, ignoreDecimal: true });
-    const decimalPart = Math.round((total - Math.floor(total)) * 100);
-    const decimalInWords = decimalPart > 0 ? ` and ${toWords(decimalPart)} Paise` : '';
+    // Correctly use en-IN for lakhs and construct the string manually
+    const integerPart = Math.floor(total);
+    const decimalPart = Math.round((total - integerPart) * 100);
+
+    const integerInWords = toWords(integerPart, { locale: 'en-IN' });
+    let amountInWords = integerInWords;
+
+    if (decimalPart > 0) {
+      const decimalInWords = toWords(decimalPart, { locale: 'en-IN' });
+      amountInWords += ` and ${decimalInWords} paise`;
+    }
 
     const templateData = {
         ...formData,
         date: formatDate(formData.date),
         amount_formatted: formatNumber(total),
-        amount_words: (amountInWords + decimalInWords).replace(/,/g, '').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        amount_words: amountInWords.replace(/,/g, '').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sales_amount_formatted: formatNumber(salesAmount),
         extra_work_formatted: extraWork === 0 ? '-' : formatNumber(extraWork),
         other_receipts_formatted: otherReceipts === 0 ? '-' : formatNumber(otherReceipts),
@@ -427,8 +435,3 @@ export async function downloadCsvAction() {
         return { success: false, error: `Failed to read CSV file: ${error.message}` };
     }
 }
-
-    
-
-    
-
